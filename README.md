@@ -7,13 +7,13 @@ This is a Go wrapper package for reading and unmarshalling data from configurati
 To install this package, use `go get`:
 
 ```
-go get github.com/your-username/configparser
+go get github.com/psyb0t/go-config-parser
 ```
 
 Import the package into your Go code:
 
 ```
-import "github.com/your-username/configparser"
+import "github.com/psyb0t/go-config-parser"
 ```
 
 ## Usage

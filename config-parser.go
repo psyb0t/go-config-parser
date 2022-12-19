@@ -53,7 +53,6 @@ func Parse(configFileType ConfigFileType, file string, target interface{}, defau
 
 	viper.SetConfigFile(file)
 
-	// https://github.com/spf13/viper/issues/584#issuecomment-451554896
 	viper.AutomaticEnv()
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 

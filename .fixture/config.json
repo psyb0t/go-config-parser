@@ -1,0 +1,6 @@
+{
+  "intValue": 123,
+  "stringValue": "test string",
+  "boolValue": true,
+  "sliceValue": [1, 2, 3]
+}

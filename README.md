@@ -1,5 +1,10 @@
 # go-config-parser
 
+[![codecov](https://codecov.io/gh/psyb0t/go-config-parser/branch/main/graph/badge.svg?token=5WRGC60Q07)](https://codecov.io/gh/psyb0t/go-config-parser)
+[![goreportcard](https://goreportcard.com/badge/github.com/psyb0t/go-config-parser)](https://goreportcard.com/report/github.com/psyb0t/go-config-parser)
+[![test](https://github.com/psyb0t/go-config-parser/actions/workflows/test.yml/badge.svg)](https://github.com/psyb0t/go-config-parser/actions/workflows/test.yml)
+[![golangci-lint](https://github.com/psyb0t/go-config-parser/actions/workflows/lint.yml/badge.svg)](https://github.com/psyb0t/go-config-parser/actions/workflows/lint.yml)
+
 This is a Go wrapper package for reading and unmarshalling data from configuration files based on [Viper](https://github.com/spf13/viper).
 
 ## Installation

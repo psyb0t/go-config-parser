@@ -35,6 +35,12 @@ The function also handles setting environment variables as configuration sources
 
 The order of importance for the used values are as such: environment variables > config file values > default values.
 
+If an empty file name is provided it will try to populate the target structure via environment variables.
+
+### Important
+
+Because of the way the underlying `viper` package works, environment variables only get recognised if there is either a value for it in a config file or if it can be found in the default values. In order for environment values to properly work with your desired structure make sure to pass in a complete map with defaults even with zero falues for all.
+
 ## Example
 
 Here is an example of how to use the `Parse` function to read in a JSON configuration file and unmarshal the data into a struct:
@@ -78,6 +84,5 @@ fmt.Println(config.Nested.Bar)
 The package defines several error constants that may be returned by the `Parse` function:
 
 - `ErrTargetNotPointer`: returned if the provided `target` value is not a pointer.
-- `ErrEmptyFileName`: returned if the provided `file` argument is an empty string.
 - `ErrFileDoesNotExist`: returned if the provided file path does not exist.
 - `ErrInvalidConfigFileType`: returned if the provided `configFileType` constant is not a valid type.

@@ -34,10 +34,6 @@ func Parse(configFileType ConfigFileType, file string, target interface{}, defau
 		return ErrTargetNotPointer
 	}
 
-	if file == "" {
-		return ErrEmptyFileName
-	}
-
 	viper.Reset()
 
 	configFileTypeString, ok := configFileTypeString[configFileType]
@@ -51,18 +47,19 @@ func Parse(configFileType ConfigFileType, file string, target interface{}, defau
 		viper.SetDefault(k, v)
 	}
 
-	viper.SetConfigFile(file)
-
 	viper.AutomaticEnv()
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
-	if err := viper.ReadInConfig(); err != nil {
-		if _, ok := err.(*fs.PathError); ok && file != "" {
-			return ErrFileDoesNotExist
-		}
+	if file != "" {
+		viper.SetConfigFile(file)
+		if err := viper.ReadInConfig(); err != nil {
+			if _, ok := err.(*fs.PathError); ok && file != "" {
+				return ErrFileDoesNotExist
+			}
 
-		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
-			return err
+			if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+				return err
+			}
 		}
 	}
 

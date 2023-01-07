@@ -39,7 +39,7 @@ If an empty file name is provided it will try to populate the target structure v
 
 ### Important
 
-Because of the way the underlying `viper` package works, environment variables only get recognised if there is either a value for it in a config file or if it can be found in the default values. In order for environment values to properly work with your desired structure make sure to pass in a complete map with defaults even with zero falues for all.
+Because of the way the underlying `viper` package works, environment variables only get recognised if there is either a value for it in a config file or if it can be found in the default values. In order for environment values to properly work with your desired structure make sure to pass in a complete map with defaults even with zero values for all.
 
 ## Example
 

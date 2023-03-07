@@ -23,6 +23,11 @@ var configFileTypeString = map[ConfigFileType]string{
 	ConfigFileTypeYAML: "yaml",
 }
 
+// SetEnvPrefix sets the prefix used for environment variables by Viper.
+func SetEnvPrefix(prefix string) {
+	viper.SetEnvPrefix(prefix)
+}
+
 // Parse reads in a configuration file and unmarshals the data into the provided target value.
 // The configFileType argument specifies the type of the configuration file (JSON or YAML).
 // The file argument is the file path of the configuration file. The target argument should be a pointer to the value
@@ -33,8 +38,6 @@ func Parse(configFileType ConfigFileType, file string, target interface{}, defau
 	if reflect.ValueOf(target).Kind() != reflect.Ptr {
 		return ErrTargetNotPointer
 	}
-
-	viper.Reset()
 
 	configFileTypeString, ok := configFileTypeString[configFileType]
 	if !ok {

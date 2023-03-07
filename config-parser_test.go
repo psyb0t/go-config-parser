@@ -4,6 +4,8 @@ import (
 	"os"
 	"reflect"
 	"testing"
+
+	"github.com/spf13/viper"
 )
 
 type testConfig struct {
@@ -146,10 +148,36 @@ func TestParse(t *testing.T) {
 				SliceValue:  []int{4, 5, 6},
 			},
 		},
+		{
+			name:       "environment variables with prefix",
+			configType: ConfigFileTypeJSON,
+			fileName:   "./.fixture/config.json",
+			target:     &testConfig{},
+			defaults:   nil,
+			envVars: map[string]string{
+				"ENVPREFIX_INTVALUE":    "789",
+				"ENVPREFIX_STRINGVALUE": "env string",
+				"ENVPREFIX_BOOLVALUE":   "false",
+				"ENVPREFIX_SLICEVALUE":  "4,5,6",
+			},
+			expectedError: nil,
+			expectedValue: testConfig{
+				IntValue:    789,
+				StringValue: "env string",
+				BoolValue:   false,
+				SliceValue:  []int{4, 5, 6},
+			},
+		},
 	}
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			viper.Reset()
+
+			if test.name == "environment variables with prefix" {
+				SetEnvPrefix("ENVPREFIX")
+			}
+
 			if test.envVars != nil {
 				for k, v := range test.envVars {
 					os.Setenv(k, v)

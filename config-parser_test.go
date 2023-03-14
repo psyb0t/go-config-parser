@@ -23,6 +23,7 @@ func TestParse(t *testing.T) {
 		target        interface{}
 		defaults      map[string]interface{}
 		envVars       map[string]string
+		envPrefix     string
 		expectedError error
 		expectedValue testConfig
 	}{
@@ -160,6 +161,7 @@ func TestParse(t *testing.T) {
 				"ENVPREFIX_BOOLVALUE":   "false",
 				"ENVPREFIX_SLICEVALUE":  "4,5,6",
 			},
+			envPrefix:     "envPrefix",
 			expectedError: nil,
 			expectedValue: testConfig{
 				IntValue:    789,
@@ -174,10 +176,6 @@ func TestParse(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			viper.Reset()
 
-			if test.name == "environment variables with prefix" {
-				SetEnvPrefix("ENVPREFIX")
-			}
-
 			if test.envVars != nil {
 				for k, v := range test.envVars {
 					os.Setenv(k, v)
@@ -185,7 +183,7 @@ func TestParse(t *testing.T) {
 				}
 			}
 
-			err := Parse(test.configType, test.fileName, test.target, test.defaults)
+			err := Parse(test.configType, test.fileName, test.target, test.defaults, test.envPrefix)
 			if err != test.expectedError {
 				t.Errorf("unexpected error: got %v, want %v", err, test.expectedError)
 			}

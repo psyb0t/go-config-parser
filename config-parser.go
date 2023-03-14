@@ -23,18 +23,23 @@ var configFileTypeString = map[ConfigFileType]string{
 	ConfigFileTypeYAML: "yaml",
 }
 
-// SetEnvPrefix sets the prefix used for environment variables by Viper.
-func SetEnvPrefix(prefix string) {
-	viper.SetEnvPrefix(prefix)
-}
-
 // Parse reads in a configuration file and unmarshals the data into the provided target value.
 // The configFileType argument specifies the type of the configuration file (JSON or YAML).
-// The file argument is the file path of the configuration file. The target argument should be a pointer to the value
-// that the configuration data will be unmarshaled into. The defaults argument is a map of default values that will be
-// set in the configuration if they are not present in the configuration file.
+// The file argument is the file path of the configuration file.
+// The target argument should be a pointer to the value that the configuration data will be unmarshaled into.
+// The defaults argument is a map of default values that will be set in the
+// configuration if they are not present in the configuration file.
+// The envPrefix argument is a string specifying the environment variables
+// prefix to use when reading env vars (eg. "myPrefix" results in "MYPREFIX_MYPROP")
 // If there is an error reading in the configuration file or unmarshaling the data, an error is returned.
-func Parse(configFileType ConfigFileType, file string, target interface{}, defaults map[string]interface{}) error {
+func Parse(configFileType ConfigFileType, file string, target interface{},
+	defaults map[string]interface{}, envPrefix string) error {
+	vpr := viper.New()
+
+	if envPrefix != "" {
+		vpr.SetEnvPrefix(envPrefix)
+	}
+
 	if reflect.ValueOf(target).Kind() != reflect.Ptr {
 		return ErrTargetNotPointer
 	}
@@ -44,18 +49,18 @@ func Parse(configFileType ConfigFileType, file string, target interface{}, defau
 		return ErrInvalidConfigFileType
 	}
 
-	viper.SetConfigType(configFileTypeString)
+	vpr.SetConfigType(configFileTypeString)
 
 	for k, v := range defaults {
-		viper.SetDefault(k, v)
+		vpr.SetDefault(k, v)
 	}
 
-	viper.AutomaticEnv()
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	vpr.AutomaticEnv()
+	vpr.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 	if file != "" {
-		viper.SetConfigFile(file)
-		if err := viper.ReadInConfig(); err != nil {
+		vpr.SetConfigFile(file)
+		if err := vpr.ReadInConfig(); err != nil {
 			if _, ok := err.(*fs.PathError); ok && file != "" {
 				return ErrFileDoesNotExist
 			}
@@ -66,5 +71,5 @@ func Parse(configFileType ConfigFileType, file string, target interface{}, defau
 		}
 	}
 
-	return viper.Unmarshal(target)
+	return vpr.Unmarshal(target)
 }

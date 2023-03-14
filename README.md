@@ -28,6 +28,7 @@ go-config-parser provides the `Parse` function for reading in and unmarshalling 
 - file: the file path of the configuration file.
 - target: a pointer to the value that the configuration data will be unmarshaled into.
 - defaults: a map of default values that will be set in the configuration if they are not present in the configuration file.
+- envPrefix: a string specifying the environment variables prefix to use when reading env vars (eg. "myPrefix" results in "MYPREFIX\_")
 
 The function uses the `viper` package to read in the configuration file, set the config file type, set default values, and unmarshal the data into the `target` value. It returns an error if there is a problem reading the configuration file or unmarshalling the data.
 
@@ -66,7 +67,7 @@ defaults := map[string]interface{}{
 
 os.Setenv("NESTED_BAR", "test")
 
-err := configparser.Parse(configparser.ConfigFileTypeJSON, "config.json", &config, defaults)
+err := configparser.Parse(configparser.ConfigFileTypeJSON, "config.json", &config, defaults, "")
 if err != nil {
 	// handle error
 }
